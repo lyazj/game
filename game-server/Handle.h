@@ -4,7 +4,7 @@
 
 #define VAL_MAX 1024
 #define VAL_NSEG 2
-#define ACC_THRESHOLD 16
+#define PRESS_THRESHOLD 10
 #define OP_INVALID ((uint8_t)-1)
 #define OP_DEFAULT 1
 

@@ -4,7 +4,7 @@
 uint8_t Handle::read_single(uint8_t pin)
 {
   if(pin == PIN_P)
-    return analogRead(pin) >= 10;
+    return analogRead(pin) >= PRESS_THRESHOLD;
   float val = (float)(analogRead(pin) * VAL_NSEG) / VAL_MAX;
   long v = round(val);
   if(v > VAL_NSEG)

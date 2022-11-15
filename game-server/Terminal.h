@@ -7,7 +7,6 @@ protected:
   Handle handle;
 
 public:
-  Terminal();
   virtual ~Terminal() = default;
   virtual void play() = 0;
 };
