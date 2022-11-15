@@ -30,6 +30,6 @@ public:
   Game();
   bool init_xy(uint8_t *x, uint8_t *y);
   void play(Player player, uint8_t *xp, uint8_t *yp, Hop op);
-  uint8_t judge();
+  bool judge(uint8_t x, uint8_t y);
   Score getScore(Player);
 };

@@ -14,9 +14,40 @@ void Game::initialize()
       board[i][j] = 0;
 }
 
-uint8_t Game::judge()  // TODO
+bool Game::judge(uint8_t x_in, uint8_t y_in)
 {
-  // TODO: score
+  uint8_t chess = board[x_in][y_in];
+  int8_t x = (int8_t)x_in;
+  int8_t y = (int8_t)y_in;
+  int8_t dx[8] = {0, 1,  0, -1, 1,  1, -1, -1};
+  int8_t dy[8] = {1, 0, -1,  0, 1, -1, -1,  1};
+
+  if(chess == 0)
+    return false;
+  for(uint8_t i = 0; i < 8; ++i)
+  {
+    if(x + (dx[i] << 2) < 0)
+      continue;
+    if(x + (dx[i] << 2) >= BOARD_HEIGHT)
+      continue;
+    if(y + (dy[i] << 2) < 0)
+      continue;
+    if(y + (dy[i] << 2) >= BOARD_WIDTH)
+      continue;
+
+    int8_t xx = x;
+    int8_t yy = y;
+    for(uint8_t j = 1; j <= 4; ++j)
+    {
+      xx += dx[i];
+      yy += dy[i];
+      if(board[xx][yy] != chess)
+        break;
+    }
+    if(j == 5)
+      return true;
+  }
+  return false;
 }
 
 void Game::summary()  // TODO
