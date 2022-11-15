@@ -11,6 +11,7 @@ private:
   Scorer scorer;
   void updateScorer();
   uint8_t getOp();
+  void newGame();
 
 public:
   virtual void play() override;

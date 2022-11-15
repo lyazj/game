@@ -1,6 +1,14 @@
 #include "Server.h"
 #include "Component.h"
 
+void Server::newGame()
+{
+  updateScorer();
+  getOp();
+  game.initialize();
+  board.initialize();
+}
+
 void Server::updateScorer()
 {
   Score score[NPLAYER];
@@ -12,18 +20,18 @@ void Server::updateScorer()
 void Server::play()
 {
   uint8_t x, y, op;
-  if(game.init_xy(&x, &y) == 0)  /* game over */
-  {
-    BLED.on();
-    for(;;);  // FIXME
-  }
+  bool win;
+  if(game.init_xy(&x, &y) == 0)  // tie
+    return newGame();
   do {
     board.pend(x, y);
     op = getOp();
-    game.play(player, &x, &y, op);
+    win = game.play(player, &x, &y, op);
   }
   while(op != PRESS);
   board.addPiece(player);
+  if(win)
+    return newGame();
   player = (uint8_t)player + 1;
   if(player == NPLAYER)
     player = 0;

@@ -50,62 +50,74 @@ bool Game::judge(uint8_t x_in, uint8_t y_in)
   return false;
 }
 
-void Game::summary()  // TODO
+void Game::tie()
 {
-  // TODO: score
+  for(uint8_t p = 0; p < NPLAYER; ++p)
+      score[p] += TIE_GAIN;
 }
 
-void Game::play(Player player, uint8_t *xp, uint8_t *yp, Hop op)
+void Game::win(Player player)
+{
+  for(uint8_t p = 0; p < NPLAYER; ++p)
+    if(p == player)
+      score[p] += WINNER_GAIN;
+    else
+      score[p] -= LOSER_LOSS;
+}
+
+bool Game::play(Player player, uint8_t *xp, uint8_t *yp, Hop op)
 {
   uint8_t x = *xp;
   uint8_t y = *yp;
-  if(x >= BOARD_HEIGHT || y >= BOARD_WIDTH)
-  {
-    BLED.on();
-    for(;;);  // FIXME
-  }
   switch(op)
   {
   case UP:
     if(x == 0)
-      return;
+      return false;
     --x;
     while(x && board[x][y])
       --x;
     if(board[x][y] == 0)
       *xp = x;
-    return;
+    return false;
   case DOWN:
     if(x == BOARD_HEIGHT - 1)
-      return;
+      return false;
     ++x;
     while(x < BOARD_HEIGHT - 1 && board[x][y])
       ++x;
     if(board[x][y] == 0)
       *xp = x;
-    return;
+    return false;
   case LEFT:
     if(y == 0)
-      return;
+      return false;
     --y;
     while(y && board[x][y])
       --y;
     if(board[x][y] == 0)
       *yp = y;
-    return;
+    return false;
   case RIGHT:
     if(y == BOARD_WIDTH - 1)
-      return;
+      return false;
     ++y;
     while(y < BOARD_WIDTH - 1 && board[x][y])
       ++y;
     if(board[x][y] == 0)
       *yp = y;
-    return;
+    return false;
   case PRESS:
     if(board[x][y] == 0)
+    {
       board[x][y] = player + 1;
-    return;
+      if(judge(x, y))
+      {
+        win(player);
+        return true;
+      }
+    }
+    return false;
   }
 }
 
@@ -124,5 +136,6 @@ bool Game::init_xy(uint8_t *xp, uint8_t *yp)
         *yp = j;
         return true;
       }
+  tie();
   return false;
 }
