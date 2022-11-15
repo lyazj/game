@@ -19,32 +19,43 @@ bool Game::judge(uint8_t x_in, uint8_t y_in)
   uint8_t chess = board[x_in][y_in];
   int8_t x = (int8_t)x_in;
   int8_t y = (int8_t)y_in;
-  int8_t dx[8] = {0, 1,  0, -1, 1,  1, -1, -1};
-  int8_t dy[8] = {1, 0, -1,  0, 1, -1, -1,  1};
+  int8_t dx[4] = {0, 1, 1,  1};
+  int8_t dy[4] = {1, 0, 1, -1};
 
   if(chess == 0)
     return false;
-  for(uint8_t i = 0; i < 8; ++i)
+  for(uint8_t i = 0; i < 4; ++i)
   {
-    if(x + (dx[i] << 2) < 0)
-      continue;
-    if(x + (dx[i] << 2) >= BOARD_HEIGHT)
-      continue;
-    if(y + (dy[i] << 2) < 0)
-      continue;
-    if(y + (dy[i] << 2) >= BOARD_WIDTH)
-      continue;
-
-    int8_t xx = x;
-    int8_t yy = y;
-    for(uint8_t j = 1; j <= 4; ++j)
+    uint8_t c = 1;
+    uint8_t x0 = x;
+    uint8_t y0 = y;
+    while(c < 5)
     {
-      xx += dx[i];
-      yy += dy[i];
-      if(board[xx][yy] != chess)
+      uint8_t x1 = x0 + dx[i];
+      uint8_t y1 = y0 + dy[i];
+      if(x1 < 0 || x1 >= BOARD_HEIGHT || y1 < 0 || y1 >= BOARD_WIDTH)
         break;
+      if(board[x1][y1] != chess)
+        break;
+      ++c;
+      x0 = x1;
+      y0 = y1;
     }
-    if(j == 5)
+    x0 = x;
+    y0 = y;
+    while(c < 5)
+    {
+      uint8_t x1 = x0 - dx[i];
+      uint8_t y1 = y0 - dy[i];
+      if(x1 < 0 || x1 >= BOARD_HEIGHT || y1 < 0 || y1 >= BOARD_WIDTH)
+        break;
+      if(board[x1][y1] != chess)
+        break;
+      ++c;
+      x0 = x1;
+      y0 = y1;
+    }
+    if(c == 5)
       return true;
   }
   return false;
@@ -72,20 +83,20 @@ bool Game::play(Player player, uint8_t *xp, uint8_t *yp, Hop op)
   switch(op)
   {
   case UP:
-    if(x == 0)
-      return false;
-    --x;
-    while(x && board[x][y])
-      --x;
-    if(board[x][y] == 0)
-      *xp = x;
-    return false;
-  case DOWN:
     if(x == BOARD_HEIGHT - 1)
       return false;
     ++x;
     while(x < BOARD_HEIGHT - 1 && board[x][y])
       ++x;
+    if(board[x][y] == 0)
+      *xp = x;
+    return false;
+  case DOWN:
+    if(x == 0)
+      return false;
+    --x;
+    while(x && board[x][y])
+      --x;
     if(board[x][y] == 0)
       *xp = x;
     return false;

@@ -4,6 +4,7 @@
 void Server::newGame()
 {
   updateScorer();
+  player = SERVER;
   getOp();
   game.initialize();
   board.initialize();

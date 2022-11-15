@@ -25,7 +25,6 @@ private:
   uint8_t board[BOARD_HEIGHT][BOARD_WIDTH];
   void tie();
   void win(Player player);
-  void initialize();
 
 public:
   Game();
@@ -33,4 +32,5 @@ public:
   bool play(Player player, uint8_t *xp, uint8_t *yp, Hop op);
   bool judge(uint8_t x, uint8_t y);
   Score getScore(Player);
+  void initialize();
 };

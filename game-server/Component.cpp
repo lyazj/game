@@ -14,6 +14,8 @@ void setup()
   pinMode(PIN_LIGHT_IN, INPUT);
   pinMode(PIN_LIGHT_OUT, OUTPUT);
   pinMode(LED_BUILTIN, OUTPUT);
+  SLED.off();
+  BLED.off();
   Wire.begin();
   Wire.beginTransmission(0x3f);
   Wire.endTransmission();
@@ -22,11 +24,7 @@ void setup()
   LCD.clear();
   LCD.home();
   LCD.print("Hello, World!");
-  SLED.off();
-  BLED.off();
   delay(1000);
-  SLED.send(1);
-  BLED.send(1);
   ssd1306_setFixedFont(ssd1306xled_font6x8);
   st7735_128x160_spi_init(PIN_RST, PIN_CES, PIN_DC);
   ssd1306_setMode(LCD_MODE_NORMAL);
